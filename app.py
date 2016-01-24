@@ -11,13 +11,14 @@ re2='\\d+'	# Uninteresting: int
 re3='.*?'	# Non-greedy match on filler
 re4='(\\d+)'	# Integer Number 1
 rg = re.compile(re1+re2+re3+re4,re.IGNORECASE|re.DOTALL)
+ID_FILE = "uploaded.txt"
+
+ids = get_checked_ids()
 
 # use firefox to get page with javascript generated content
 url = "https://500px.com/popular?categories=Nature,Landscapes"
 with closing(Firefox()) as browser:
 	browser.get(url)
-     # button = browser.find_element_by_name('button')
-     # button.click()
      # wait for the page to load
      # WebDriverWait(browser, timeout=10).until(
      #     lambda x: x.find_element_by_id('someId_that_must_be_on_new_page'))
@@ -31,11 +32,9 @@ with closing(Firefox()) as browser:
 
 		f = cStringIO.StringIO(urllib.urlopen(src).read())
 		im = Image.open(f)
-		width, height = im.size
+		
 
-		ratio = width / float(height)
-
-		if(ratio > 0.6 and ratio < 1.3 and width > 5 and height > 5):
+		if(check_ratios(im)):
 			print "aww yiss:"
 			print(alt + " " + src)
 			print (str(width) + " x " + str(height))
@@ -47,6 +46,23 @@ with closing(Firefox()) as browser:
 
 				regex = "<img src='(.+?)'>"
 				url2 = re.findall(regex, urllib.urlopen(picURL).read())[0]
-				f = open("pic.jpg", "wb")
-				f.write(urllib.urlopen(url2).read())
-				f.close()
+				if check_id(picID):
+					f = open("pic.jpg", "wb")
+					f.write(urllib.urlopen(url2).read())
+					f.close()
+
+def check_ratios(image):
+	width, height = image.size
+	ratio = width / float(height)
+	if(ratio > 0.6 and ratio < 1.3 and width > 5 and height > 5):
+		return True
+	return False
+def check_id(image_id):
+	if image_id in ids:
+		return False
+	return True
+def add_id(image_id):
+	ids.append(image_id)
+	f = open(ID_FILE, "a")
+	f.write("," + image_id)
+	f.close()
