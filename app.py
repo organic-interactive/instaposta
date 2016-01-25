@@ -13,7 +13,32 @@ re4='(\\d+)'	# Integer Number 1
 rg = re.compile(re1+re2+re3+re4,re.IGNORECASE|re.DOTALL)
 ID_FILE = "uploaded.txt"
 
+def get_checked_ids():
+	f = open(ID_FILE, "r")
+	contents = f.read()
+	f.close()
+	# so that the initial comma that's hacked in doesn't fuck something up
+	return remove_white_space(contents)[1:].split(",") 
+def remove_white_space(str):
+	return str.replace(" ", "").replace("\t", "").replace("\n", "")
+
 ids = get_checked_ids()
+
+def check_ratios(image):
+	width, height = image.size
+	ratio = width / float(height)
+	if(ratio > 0.6 and ratio < 1.3 and width > 5 and height > 5):
+		return True
+	return False
+def check_id(image_id):
+	if image_id in ids:
+		return False
+	return True
+def add_id(image_id):
+	ids.append(image_id)
+	f = open(ID_FILE, "a")
+	f.write("," + image_id)
+	f.close()
 
 # use firefox to get page with javascript generated content
 url = "https://500px.com/popular?categories=Nature,Landscapes"
@@ -35,9 +60,9 @@ with closing(Firefox()) as browser:
 		
 
 		if(check_ratios(im)):
-			print "aww yiss:"
-			print(alt + " " + src)
-			print (str(width) + " x " + str(height))
+			# print "aww yiss:"
+			# print(alt + " " + src)
+			# print (str(width) + " x " + str(height))
 			m = rg.search(src)
 			if m:
 				picID = m.group(1)
@@ -51,18 +76,3 @@ with closing(Firefox()) as browser:
 					f.write(urllib.urlopen(url2).read())
 					f.close()
 
-def check_ratios(image):
-	width, height = image.size
-	ratio = width / float(height)
-	if(ratio > 0.6 and ratio < 1.3 and width > 5 and height > 5):
-		return True
-	return False
-def check_id(image_id):
-	if image_id in ids:
-		return False
-	return True
-def add_id(image_id):
-	ids.append(image_id)
-	f = open(ID_FILE, "a")
-	f.write("," + image_id)
-	f.close()
