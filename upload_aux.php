@@ -2,12 +2,11 @@
 
 require 'uploadImage.php';
 
-echo $argv[0];
-echo $argv[1];
-echo $argv[2];
+// $argv[0]; is always the script name
+$un = $argv[1];
+$pw = $argv[2];
+$path = $argv[3];
 
-die();
-exit();
-uploadImage("", "", "2.jpeg");
+uploadImage($un, $pw, $path);
 
 ?>
