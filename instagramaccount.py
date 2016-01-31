@@ -15,15 +15,24 @@ class InstagramAccount:
 		self.access_token = access_token
 		self.image_ids = image_ids
 		self.tags = tags
-	def uploadNewImage(self):
+	def upload_new_image(self):
 		# will get a fresh image to upload and upload it using py + php
 		raise NotImplementedError
-	def makeSpamComment(self):
+	def make_spam_comment(self):
 		# will use arguments to have php comment on something relevant
 		raise NotImplementedError
-	def makeSpamLike(self):
+	def make_spam_like(self):
 		# will use php to like a relevant picture
 		raise NotImplementedError
+	def gen_structure(self):
+		structure = {}
+		structure["username"] = self.username
+		structure["password"] = self.password
+		structure["email"] = self.email
+		structure["access_token"] = self.access_token
+		structure["image_ids"] = self.image_ids
+		structure["tags"] = self.tags
+		return structure
 
 class InstagramAccountCollection:
 	accounts = []
@@ -35,8 +44,7 @@ class InstagramAccountCollection:
 		db.close()
 		json_obj = self._byteify(json.loads(raw_contents))
 		
-		# removes meaningless '' from beginning
-		for _, obj in json_obj.iteritems():
+		for obj in json_obj:
 			username = obj["username"]
 			password = obj["password"]
 			email = obj["email"]
@@ -47,7 +55,13 @@ class InstagramAccountCollection:
 				access_token, image_ids, tags)
 			self.accounts.append(loaded_account)
 	def save_accounts(self, database_file):
-		raise NotImplementedError
+		serializable_accs = []
+		for account in self.accounts:
+			serializable_accs.append(account.gen_structure())
+		json_string = json.dumps(serializable_accs)
+		db = open(database_file, 'w')
+		db.write(json_string)
+		db.close()
 	def _byteify(self, input):
 		## Simple converter from unicode to ascii for json loads out
 		if isinstance(input, dict):
