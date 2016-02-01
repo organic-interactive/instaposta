@@ -52,7 +52,7 @@ class InstagramAccount:
 		if (self._exec_php(UPLOADER_SCRIPT_FILENAME, self.username, self.password,
 			image_loc, image.description) == UPLOAD_SUCCESS):
 			self.image_ids.append(image.img_id)
-			print image.img_id + ": UPLOAD SUCCESS"
+			print image.img_id + ": UPLOAD SUCCESS ON " + self.username
 		else:
 			print "UPLOAD FAILURE"
 	def _exec_php(self, script_loc, *args):

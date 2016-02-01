@@ -6,9 +6,9 @@ require 'uploadImage.php';
 $un = $argv[1];
 $pw = $argv[2];
 $path = $argv[3];
-$descrip = $argv[4];
+$caption = $argv[4];
 
 echo "SUCCESS";
-//uploadImage($un, $pw, $path);
+uploadImage($un, $pw, $path, $caption);
 
 ?>

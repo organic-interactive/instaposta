@@ -86,7 +86,7 @@ function buildBody($bodies, $boundary) {
     return $body;
 }
 
-function uploadImage($username, $password, $photo) {
+function uploadImage($username, $password, $photo, $caption) {
   if(!isset($photo) || !is_file($photo)) {
       die("no photo found !");
   } else {
@@ -96,7 +96,7 @@ function uploadImage($username, $password, $photo) {
       list($width, $height) = getimagesize($photo);
   }
   // Set the caption for the photo
-  $caption = "wat";
+  // $caption = "wat";
   // Define the user agent
   $agent = 'Instagram 7.10.0 Android (23/6.0; 515dpi; 1440x2416; huawei/google; Nexus 6P; angler; angler; en_US)';
   // Define the GuID
