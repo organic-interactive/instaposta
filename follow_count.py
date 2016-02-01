@@ -7,7 +7,7 @@ def get_follower_count(username):
 	return int(re.findall(regex, urllib.urlopen(url_final).read())[0].replace(",",""))
 
 if __name__ == "__main__":
-	username = "amazing_outside"
+	username = "asdf"
 	wait_time = 60
 	while True:
 		print get_follower_count(username)
