@@ -42,9 +42,10 @@ class ImageGetter:
 		img_write.close()
 	def _check_id(self, image_id):
 		if image_id in self.uploaded_ids:
-			return False	
+			return False
 		return True
 	def _check_ratios(self, image_url):
+		print image_url
 		f = cStringIO.StringIO(urllib.urlopen(image_url).read())
 		image = Image.open(f)
 
