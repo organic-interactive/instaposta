@@ -1,4 +1,15 @@
-import sys, json
+import subprocess, json
+from contextlib import closing
+from selenium.webdriver import Firefox # pip install selenium
+from selenium.webdriver.support.ui import WebDriverWait
+import time
+import urllib, re
+from PIL import Image
+import cStringIO
+from imagegetter import ImageGetter
+
+UPLOADER_SCRIPT_FILENAME = "upload_aux.php"
+UPLOAD_SUCCESS = "SUCCESS"
 
 class InstagramAccount:
 	username = ''
@@ -17,7 +28,10 @@ class InstagramAccount:
 		self.tags = tags
 	def upload_new_image(self):
 		# will get a fresh image to upload and upload it using py + php
-		raise NotImplementedError
+		ig = ImageGetter(self.image_ids)
+		ig.get_image()
+		self._run_uploader(ig)
+		# raise NotImplementedError
 	def make_spam_comment(self):
 		# will use arguments to have php comment on something relevant
 		raise NotImplementedError
@@ -33,6 +47,23 @@ class InstagramAccount:
 		structure["image_ids"] = self.image_ids
 		structure["tags"] = self.tags
 		return structure
+	def _run_uploader(self, image):
+		image_loc = image.save_directory + image.img_id + image.filetype
+		if (self._exec_php(UPLOADER_SCRIPT_FILENAME, self.username, self.password,
+			image_loc, image.description) == UPLOAD_SUCCESS):
+			self.image_ids.append(image.img_id)
+			print image.img_id + ": UPLOAD SUCCESS ON " + self.username
+		else:
+			print "UPLOAD FAILURE"
+	def _exec_php(self, script_loc, *args):
+		## Executes the given file with the given arguments synchronously
+		param1 = ['php', script_loc]
+		for arg in args:
+			param1.append(arg)
+		p = subprocess.Popen(param1, stdout=subprocess.PIPE)
+		result = p.communicate()[0]
+		print result
+		return result
 
 class InstagramAccountCollection:
 	accounts = []

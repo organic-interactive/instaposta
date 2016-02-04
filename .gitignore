@@ -1,1 +1,6 @@
 config.php
+accounts.json
+__pycache__/*
+*.pyc
+cookies.txt
+img/*
