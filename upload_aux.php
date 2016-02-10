@@ -8,7 +8,6 @@ $pw = $argv[2];
 $path = $argv[3];
 $caption = $argv[4];
 
-echo "SUCCESS";
 uploadImage($un, $pw, $path, $caption);
 
 ?>

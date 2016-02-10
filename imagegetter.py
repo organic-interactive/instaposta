@@ -16,7 +16,12 @@ class ImageGetter:
 		self.save_directory = "img/"
 		self.filetype = ".jpg"
 		self.uploaded_ids = uploaded_ids
-	def get_image(self):
+	def get_image(self, tags):
+		#will use a tag list or a single tag to generate a url and use it to 
+		#find suitable pictures and return one
+		raise NotImplementedError
+	def get_test_image(self):
+		## Returns an image from a static URL
 		url = "https://500px.com/popular?categories=Nature,Landscapes"
 		with closing(Firefox()) as browser:
 			browser.get(url)

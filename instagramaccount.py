@@ -9,7 +9,8 @@ import cStringIO
 from imagegetter import ImageGetter
 
 UPLOADER_SCRIPT_FILENAME = "upload_aux.php"
-UPLOAD_SUCCESS = "SUCCESS"
+# defined by the output of uploadImage.php's echos
+UPLOAD_SUCCESS = "Success"
 
 class InstagramAccount:
 	username = ''
@@ -29,7 +30,7 @@ class InstagramAccount:
 	def upload_new_image(self):
 		# will get a fresh image to upload and upload it using py + php
 		ig = ImageGetter(self.image_ids)
-		ig.get_image()
+		ig.get_test_image() #TODO: Set up for more than just testing
 		self._run_uploader(ig)
 		# raise NotImplementedError
 	def make_spam_comment(self):
