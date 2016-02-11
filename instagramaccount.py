@@ -50,8 +50,9 @@ class InstagramAccount:
 		return structure
 	def _run_uploader(self, image):
 		image_loc = image.save_directory + image.img_id + image.filetype
+		descrip = image.description + ' ' + self._tag_list_to_tag_string(self.tags)
 		if (self._exec_php(UPLOADER_SCRIPT_FILENAME, self.username, self.password,
-			image_loc, image.description) == UPLOAD_SUCCESS):
+			image_loc, descrip) == UPLOAD_SUCCESS):
 			self.image_ids.append(image.img_id)
 			print image.img_id + ": UPLOAD SUCCESS ON " + self.username
 		else:
@@ -65,7 +66,9 @@ class InstagramAccount:
 		result = p.communicate()[0]
 		print result
 		return result
-
+	def _tag_list_to_tag_string(tags):
+		tagstr = lambda t: '#' + t[-1] + ' ' + tagstr(tags[:-1]) if len(t) > 0 else ''
+		return tagstr(tags)[:-1]
 class InstagramAccountCollection:
 	accounts = []
 	def __init__(self):
