@@ -12,14 +12,26 @@ class ImageGetter:
 	img_id = ''
 	description = ''
 	filetype = ''
-	def __init__(self, uploaded_ids):
+	def __init__(self, uploaded_ids, scrape_site):
 		self.save_directory = "img/"
 		self.filetype = ".jpg"
 		self.uploaded_ids = uploaded_ids
-	def get_image(self, tags):
-		#will use a tag list or a single tag to generate a url and use it to 
-		#find suitable pictures and return one
-		raise NotImplementedError
+	def get_image(self):
+		## Uses supplied scrape site to find new pictures
+		url = scrape_site
+		with closing(Firefox()) as browser:
+			browser.get(url)
+			time.sleep(5) # TODO: fix with something less static
+			imgs = browser.find_elements_by_tag_name('img')
+			for img in imgs:
+				src = img.get_attribute('src')
+				alt = img.get_attribute('alt')
+				image_id = re.findall("/photo/(.+?)/", src)[0]
+				if(self._check_id(image_id) and self._check_ratios(src)):
+					self.img_id = image_id
+					self.description = alt
+					self._save_hd_image()
+					break
 	def get_test_image(self):
 		## Returns an image from a static URL
 		url = "https://500px.com/popular?categories=Nature,Landscapes"
