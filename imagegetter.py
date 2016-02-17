@@ -53,8 +53,9 @@ class ImageGetter:
 
 	def _save_hd_image(self):
 		pic_url = "https://500px.com/photo/" + self.img_id + "/" # scrape full size pic
-		regex = "<img src='(.+?)'>"
-		url2 = re.findall(regex, urllib.urlopen(pic_url).read())[0]
+		regex = "\"image_url\"\:\[(.+?)\]"
+		data = re.findall(regex, urllib.urlopen(pic_url).read())[0]
+		url2 = data.split(",")[-2][1:-1].replace("\\/", "/")
 		img_write = open(self.save_directory + self.img_id + self.filetype, 'wb')
 
 		img_write.write(urllib.urlopen(url2).read())

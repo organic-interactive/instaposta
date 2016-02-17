@@ -4,3 +4,5 @@ __pycache__/*
 *.pyc
 cookies.txt
 img/*
+test.py
+fetch.txt
