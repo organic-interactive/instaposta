@@ -12,13 +12,15 @@ class ImageGetter:
 	img_id = ''
 	description = ''
 	filetype = ''
+	scrape_site = ''
 	def __init__(self, uploaded_ids, scrape_site):
 		self.save_directory = "img/"
 		self.filetype = ".jpg"
 		self.uploaded_ids = uploaded_ids
+		self.scrape_site = scrape_site
 	def get_image(self):
 		## Uses supplied scrape site to find new pictures
-		url = scrape_site
+		url = self.scrape_site
 		with closing(Firefox()) as browser:
 			browser.get(url)
 			time.sleep(5) # TODO: fix with something less static
