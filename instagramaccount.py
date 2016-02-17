@@ -73,7 +73,7 @@ class InstagramAccount:
 		for tag in tags:
 			tagstr += '#' + tag + ' '
 		# tagstr = lambda t: '#' + t[-1] + ' ' + tagstr(tags[:-1]) if len(t) > 0 else ''
-		return tagstr(tags)[:-1]
+		return tagstr[:-1]
 class InstagramAccountCollection:
 	accounts = []
 	def __init__(self):
