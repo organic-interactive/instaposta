@@ -20,17 +20,18 @@ class InstagramAccount:
 	image_ids = []
 	tags = []
 	def __init__(self, username, password, email, access_token, image_ids, 
-		tags):
+		tags, scrape_site):
 		self.username = username
 		self.password = password
 		self.email = email
 		self.access_token = access_token
 		self.image_ids = image_ids
 		self.tags = tags
+		self.scrape_site = scrape_site
 	def upload_new_image(self):
 		# will get a fresh image to upload and upload it using py + php
 		ig = ImageGetter(self.image_ids)
-		ig.get_test_image() #TODO: Set up for more than just testing
+		ig.get_image() #TODO: Set up for more than just testing
 		self._run_uploader(ig)
 		# raise NotImplementedError
 	def make_spam_comment(self):
@@ -47,6 +48,7 @@ class InstagramAccount:
 		structure["access_token"] = self.access_token
 		structure["image_ids"] = self.image_ids
 		structure["tags"] = self.tags
+		structure["site"] = self.scrape_site
 		return structure
 	def _run_uploader(self, image):
 		image_loc = image.save_directory + image.img_id + image.filetype
@@ -86,8 +88,9 @@ class InstagramAccountCollection:
 			access_token = obj["access_token"]
 			image_ids = obj["image_ids"]
 			tags = obj["tags"]
+			scrape_site = obj["site"]
 			loaded_account = InstagramAccount(username, password, email, 
-				access_token, image_ids, tags)
+				access_token, image_ids, tags, scrape_site)
 			self.accounts.append(loaded_account)
 	def save_accounts(self, database_file):
 		serializable_accs = []
