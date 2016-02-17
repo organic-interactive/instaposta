@@ -30,7 +30,7 @@ class InstagramAccount:
 		self.scrape_site = scrape_site
 	def upload_new_image(self):
 		# will get a fresh image to upload and upload it using py + php
-		ig = ImageGetter(self.image_ids)
+		ig = ImageGetter(self.image_ids, self.scrape_site)
 		ig.get_image() #TODO: Set up for more than just testing
 		self._run_uploader(ig)
 		# raise NotImplementedError
