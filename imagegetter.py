@@ -35,7 +35,8 @@ class ImageGetter:
 					self.img_id = image_id
 					self.description = alt
 					self._save_hd_image()
-					break
+					return
+		raise Exception('Failed to find a suitable image: all out or bugged')
 	def get_test_image(self):
 		## Returns an image from a static URL
 		url = "https://500px.com/popular?categories=Nature,Landscapes"
