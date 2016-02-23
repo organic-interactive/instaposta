@@ -77,4 +77,7 @@ class ImageGetter:
 
 		if(ratio > 0.8 and ratio < 1.3 and width > 5 and height > 5):
 			return True
+		else:
+			print "Unsuitable image"
+			print "ratio: %s, width: %s, height: %s" % (ratio, width, height)
 		return False
