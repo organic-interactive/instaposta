@@ -74,8 +74,8 @@ class ImageGetter:
 
 		width, height = image.size
 		ratio = width / float(height)
-
-		if(ratio > 0.8 and ratio < 1.3 and width > 5 and height > 5):
+		# source: https://help.instagram.com/1469029763400082
+		if(ratio > 0.8 and ratio < 1.91 and width > 5 and height > 5):
 			return True
 		else:
 			print "Unsuitable image"
