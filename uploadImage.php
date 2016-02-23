@@ -225,7 +225,7 @@ function uploadImage($username, $password, $photo, $caption) {
                                       echo "Success";
                                   } else {
                                       echo 'Fail';
-                                      echo $obj;
+                                      echo var_dump($obj);
                                   }
                               }
                           }
