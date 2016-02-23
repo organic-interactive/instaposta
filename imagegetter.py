@@ -25,7 +25,9 @@ class ImageGetter:
 			browser.get(url)
 			time.sleep(5) # TODO: fix with something less static
 			imgs = browser.find_elements_by_tag_name('img')
-			for img in imgs:
+			# TODO: fix this temporary workaround that prevents ad server data
+			# from reaching the image checks
+			for img in [i for i in imgs if 'adsrvr' not in i.get_attribute('src')]:
 				src = img.get_attribute('src')
 				alt = img.get_attribute('alt')
 				image_id = re.findall("/photo/(.+?)/", src)[0]
