@@ -72,6 +72,6 @@ class ImageGetter:
 		width, height = image.size
 		ratio = width / float(height)
 
-		if(ratio > 0.6 and ratio < 1.3 and width > 5 and height > 5):
+		if(ratio > 0.8 and ratio < 1.3 and width > 5 and height > 5):
 			return True
 		return False
