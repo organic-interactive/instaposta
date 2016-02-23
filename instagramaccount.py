@@ -58,7 +58,7 @@ class InstagramAccount:
 			self.image_ids.append(image.img_id)
 			print image.img_id + ": UPLOAD SUCCESS ON " + self.username
 		else:
-			print "UPLOAD FAILURE"
+			print image.img_id + ": UPLOAD FAILURE"
 	def _exec_php(self, script_loc, *args):
 		## Executes the given file with the given arguments synchronously
 		param1 = ['php', script_loc]
