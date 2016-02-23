@@ -230,6 +230,7 @@ function uploadImage($username, $password, $photo, $caption) {
                           }
                       } else {
                           echo "Status isn't okay";
+                          echo $status;
                       }
                   }
               }
