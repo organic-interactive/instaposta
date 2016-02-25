@@ -53,8 +53,8 @@ class InstagramAccount:
 		return structure
 	def _run_uploader(self, image):
 		image_loc = image.save_directory + image.img_id + image.filetype
-		descrip = image.description + ' ' + 
-				  self._tag_list_to_tag_string(self.tags)
+		descrip = image.description + ' ' + self._tag_list_to_tag_string(
+			self.tags)
 		if (self._exec_php(UPLOADER_SCRIPT_FILENAME, self.username, 
 			self.password, image_loc, descrip) == UPLOAD_SUCCESS):
 			self.image_ids.append(image.img_id)
