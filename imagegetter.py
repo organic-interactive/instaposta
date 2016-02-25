@@ -1,6 +1,9 @@
 from contextlib import closing
 from selenium.webdriver import Firefox # pip install selenium
 from selenium.webdriver.support.ui import WebDriverWait
+from pyvirtualdisplay import Display # pip install pyvirtualdisplay 
+#									   pip install pyscreenshot
+from selenium import webdriver # TODO: probably unneccessary
 import time
 import urllib, re
 from PIL import Image
@@ -21,13 +24,20 @@ class ImageGetter:
 	def get_image(self):
 		## Uses supplied scrape site to find new pictures
 		url = self.scrape_site
+		# virtual display for headless runs
+		display = Display(visible=0, size=(800, 600))
+		display.start()
+
 		with closing(Firefox()) as browser:
 			browser.get(url)
-			time.sleep(5) # TODO: fix with something less static
+			time.sleep(5) # TODO: fix with something less static, but still
+			# multipurpose considering scrape_site as a db var
 			imgs = browser.find_elements_by_tag_name('img')
 			# TODO: fix this temporary workaround that prevents ad server data
 			# from reaching the image checks
-			for img in [i for i in imgs if 'adsrvr' not in i.get_attribute('src')]:
+			no_ad_imgs = [i for i in imgs if 'adsrvr' not in \
+				i.get_attribute('src')]
+			for img in no_ad_imgs:
 				src = img.get_attribute('src')
 				alt = img.get_attribute('alt')
 				image_id = re.findall("/photo/(.+?)/", src)[0]
@@ -35,7 +45,9 @@ class ImageGetter:
 					self.img_id = image_id
 					self.description = alt
 					self._save_hd_image()
+					display.stop()
 					return
+		display.stop()
 		raise Exception('Failed to find a suitable image: all out or bugged')
 	def get_test_image(self):
 		## Returns an image from a static URL
@@ -55,11 +67,12 @@ class ImageGetter:
 					break
 
 	def _save_hd_image(self):
-		pic_url = "https://500px.com/photo/" + self.img_id + "/" # scrape full size pic
+		pic_url = "https://500px.com/photo/" + self.img_id + "/" # hd scrape
 		regex = "\"image_url\"\:\[(.+?)\]"
 		data = re.findall(regex, urllib.urlopen(pic_url).read())[0]
 		url2 = data.split(",")[-2][1:-1].replace("\\/", "/")
-		img_write = open(self.save_directory + self.img_id + self.filetype, 'wb')
+		img_write = open(self.save_directory + self.img_id + self.filetype, 
+			'wb')
 
 		img_write.write(urllib.urlopen(url2).read())
 		img_write.close()
@@ -68,7 +81,7 @@ class ImageGetter:
 			return False
 		return True
 	def _check_ratios(self, image_url):
-		print image_url
+		# print image_url
 		f = cStringIO.StringIO(urllib.urlopen(image_url).read())
 		image = Image.open(f)
 

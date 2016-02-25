@@ -41,6 +41,7 @@ class InstagramAccount:
 		# will use php to like a relevant picture
 		raise NotImplementedError
 	def gen_structure(self):
+		## Returns a dictionary of the InstagramAccount attributes
 		structure = {}
 		structure["username"] = self.username
 		structure["password"] = self.password
@@ -52,9 +53,10 @@ class InstagramAccount:
 		return structure
 	def _run_uploader(self, image):
 		image_loc = image.save_directory + image.img_id + image.filetype
-		descrip = image.description + ' ' + self._tag_list_to_tag_string(self.tags)
-		if (self._exec_php(UPLOADER_SCRIPT_FILENAME, self.username, self.password,
-			image_loc, descrip) == UPLOAD_SUCCESS):
+		descrip = image.description + ' ' + 
+				  self._tag_list_to_tag_string(self.tags)
+		if (self._exec_php(UPLOADER_SCRIPT_FILENAME, self.username, 
+			self.password, image_loc, descrip) == UPLOAD_SUCCESS):
 			self.image_ids.append(image.img_id)
 			print image.img_id + ": UPLOAD SUCCESS ON " + self.username
 		else:
@@ -71,9 +73,8 @@ class InstagramAccount:
 	def _tag_list_to_tag_string(self, tags):
 		tagstr = ''
 		for tag in tags:
-			tagstr += '#' + tag + ' '
-		# tagstr = lambda t: '#' + t[-1] + ' ' + tagstr(tags[:-1]) if len(t) > 0 else ''
-		return tagstr[:-1]
+			tagstr += '#' + tag + ' ' # leaves trailing space
+		return tagstr[:-1] # remove trailing space during return
 class InstagramAccountCollection:
 	accounts = []
 	def __init__(self):
@@ -84,6 +85,7 @@ class InstagramAccountCollection:
 		db.close()
 		json_obj = self._byteify(json.loads(raw_contents))
 		
+		# TODO: determine if this is bad practice to have as a constructor
 		for obj in json_obj:
 			username = obj["username"]
 			password = obj["password"]
